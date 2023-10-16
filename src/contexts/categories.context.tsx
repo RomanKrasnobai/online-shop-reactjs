@@ -1,29 +1,27 @@
 import {createContext, useEffect, useState} from "react";
-import {Product} from "../interfaces/product.interface";
 import {getCategoriesAndDocuments} from "../utils/firebase/firebase.utils";
-// import {addCollectionAndDocuments} from "../utils/firebase/firebase.utils";
-// import SHOP_DATA from "../shop-data";
-// import {Constants} from "../interfaces/constants";
+import {Categories} from "../interfaces/categories.interface";
 
 export const CategoriesContext = createContext({
   categoriesMap: {},
 });
 
 export const CategoriesProvider = ({ children }: any) => {
-  const [categoriesMap, setCategoriesMap] = useState({});
+  const [categoriesMap, setCategoriesMap] = useState<Categories>({
+    hats: [],
+    jackets: [],
+    mens: [],
+    sneakers: [],
+    womens: []
+  });
 
   useEffect(() => {
     const getCategoriesMap = async () => {
-      const categoryMap = await getCategoriesAndDocuments();
-      console.log(categoryMap);
+      const categoryMap: Categories = await getCategoriesAndDocuments();
+      setCategoriesMap(categoryMap);
     }
     getCategoriesMap();
   }, []);
-
-  //create new 'categories' collection in Firestore database
-  // useEffect(() => {
-  //   addCollectionAndDocuments(Constants.DB_KEY_CATEGORIES, SHOP_DATA);
-  // }, []);
 
   const value = { categoriesMap };
 

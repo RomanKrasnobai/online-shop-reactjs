@@ -1,18 +1,23 @@
 import React from "react";
-import './category-item.styles.scss';
 import {Category} from "../../interfaces/category.interface";
+import {BackGroundImage, Body, DirectoryItemContainer} from "./directory-item.styles";
+import {useNavigate} from "react-router-dom";
 
-const CategoryItem = ({category}: any) => {
-  const { title, imageUrl }: Category = category;
+const DirectoryItem = ({category}: any) => {
+  const { title, imageUrl, route }: Category = category;
+  const navigate = useNavigate();
+
+  // @ts-ignore
+  const onNavigateHandler = () => navigate(route);
 
   return(
-    <div className="category-container">
-      <div className="background-image" style={{backgroundImage: `url(${imageUrl})`}}/>
-      <div className="category-body-container">
+    <DirectoryItemContainer onClick={onNavigateHandler}>
+      <BackGroundImage imageurl={imageUrl} />
+      <Body>
         <h2>{title}</h2>
         <p>Shop now</p>
-      </div>
-    </div>
+      </Body>
+    </DirectoryItemContainer>
   )
 }
-export default CategoryItem;
+export default DirectoryItem;
