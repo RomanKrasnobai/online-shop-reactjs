@@ -2,14 +2,17 @@ import Button from "../button/button.component";
 import {BUTTON_TYPES} from "../../interfaces/button-types.enum";
 import {Product} from "../../interfaces/product.interface";
 import "./product-card.styles.scss";
-import {useContext} from "react";
-import {CartContext} from "../../contexts/cart.context";
+import {useDispatch, useSelector} from "react-redux";
+import {addItemToCart} from "../../store/cart/cart.action";
+import {selectCartItems} from "../../store/cart/cart.selector";
+
 
 const ProductCard = ({ product }: any) => {
   const { imageUrl, name, price }: Product = product;
-  const { addItemToCart } = useContext(CartContext);
+  const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
 
-  const addProductToCart = () => addItemToCart(product);
+  const addProductToCart = () => dispatch(addItemToCart(cartItems, product));
 
   return (
     <div className="product-card-container">
