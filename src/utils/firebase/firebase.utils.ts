@@ -69,7 +69,7 @@ export const createUserDocumentFromAuth = async (userAuth: any, additionalInfo?:
     }
   }
 
-  return userDocRef;
+  return userSnapshot;
 }
 
 export const createAuthUserWithEmailAndPassword = async (email: string, password: string) => {
@@ -84,7 +84,7 @@ export const signInAuthUserWithEmailAndPassword = async (email: string | undefin
 
 export const signOutUser = async () => await signOut(auth);
 
-export const onAuthStateChangedListener = (callback: any) => onAuthStateChanged(auth, callback);
+// export const onAuthStateChangedListener = (callback: any) => onAuthStateChanged(auth, callback);
 
 export const getCategoriesAndDocuments = async () => {
   const collectionRef = collection(db, Constants.DB_KEY_CATEGORIES);
@@ -93,4 +93,17 @@ export const getCategoriesAndDocuments = async () => {
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.map(docSnapshot => docSnapshot.data());
+}
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  })
 }

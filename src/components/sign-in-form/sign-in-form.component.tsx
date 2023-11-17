@@ -3,11 +3,9 @@ import {DefaultFormFields} from "../../interfaces/default-form-fields.interface"
 import {useState} from "react";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
-import {
-  sighInWithGooglePopup,
-  signInAuthUserWithEmailAndPassword
-} from "../../utils/firebase/firebase.utils";
 import {BUTTON_TYPES} from "../../interfaces/button-types.enum";
+import {useDispatch} from "react-redux";
+import {emailSignInStart, googleSignInStart} from "../../store/user/user.action";
 
 
 const defaultFormFields: Partial<DefaultFormFields> = {
@@ -16,6 +14,7 @@ const defaultFormFields: Partial<DefaultFormFields> = {
 }
 
 const SignInForm = () => {
+  const dispatch = useDispatch();
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
@@ -23,13 +22,12 @@ const SignInForm = () => {
     setFormFields(defaultFormFields);
   }
 
-  const signInWithGoogle = async () => await sighInWithGooglePopup();
+  const signInWithGoogle = () => dispatch(googleSignInStart());
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     try {
-      // @ts-ignore
-      const { user } = await signInAuthUserWithEmailAndPassword(email, password);
+      dispatch(emailSignInStart(email, password));
       resetFormFields();
     } catch (error: any) {
       switch (error.code) {

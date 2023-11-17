@@ -1,7 +1,6 @@
 import {createAction} from "../../utils/reducer/reducer.utils";
 import {CATEGORIES_ACTION_TYPES} from "./category.types";
 import {CategoriesMap} from "../../interfaces/categories-map.interface";
-import {getCategoriesAndDocuments} from "../../utils/firebase/firebase.utils";
 
 export const fetchCategoriesStart = () => createAction(CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_START);
 
@@ -10,15 +9,3 @@ export const fetchCategoriesSuccess = (categories: CategoriesMap[]) =>
 
 export const fetchCategoriesError = (error: any) =>
     createAction(CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_FAILED, error);
-
-
-export const fetCategoriesAsync = () => async (dispatch: any) => {
-  dispatch(fetchCategoriesStart());
-  try {
-    // @ts-ignore
-    const categories: CategoriesMap[] = await getCategoriesAndDocuments();
-    dispatch(fetchCategoriesSuccess(categories));
-  } catch (error) {
-    dispatch(fetchCategoriesError(error));
-  }
-}
